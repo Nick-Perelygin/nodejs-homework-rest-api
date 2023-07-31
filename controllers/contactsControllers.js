@@ -1,16 +1,16 @@
 const {contactsSchema} = require('../schemas');
 const {HttpError, ctrlWrapper} = require('../utility');
-const contact = contactsSchema.Contact
+const {Contact} = contactsSchema
 
 async function listContacts (req, res) {
     const {_id: owner} = req.user;
-    const result = await contact.find({owner}, '-createdAt -updatedAt');
+    const result = await Contact.find({owner}, '-createdAt -updatedAt');
     res.json(result);
 }
 
 async function getContactById(req, res) {
     const {contactId} = req.params;
-    const result = await contact.findById(contactId);
+    const result = await Contact.findById(contactId);
     if(!result){
         throw HttpError(404);
     }
@@ -19,7 +19,7 @@ async function getContactById(req, res) {
 
 async function removeContact(req, res) {
     const {contactId} = req.params;
-    const result = await contact.findByIdAndRemove(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if(!result){
         throw HttpError(404);
     }
@@ -28,13 +28,13 @@ async function removeContact(req, res) {
   
 async function addContact(req, res) {
     const {_id: owner} = req.user;
-    const result = await contact.create({...req.body, owner});
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
 }
 
 async function updateContact(req, res) {
     const {contactId} = req.params;
-    const result = await contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if(!result){
         throw HttpError(404);
     }
@@ -46,7 +46,7 @@ async function updateStatusContact(req, res) {
         throw HttpError(400, 'Missing field favorite');
     }
     const {contactId} = req.params;
-    const result = await contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if(!result){
         throw HttpError(404);
     }
