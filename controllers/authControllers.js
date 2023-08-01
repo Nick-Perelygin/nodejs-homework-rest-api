@@ -22,7 +22,7 @@ async function register (req, res) {
 async function login (req, res) {
     const {email, password} = req.body;
     const user = await User.findOne({email});
-    if(user){
+    if(!user){
         throw HttpError(401, 'Email or password invalid')
     }
     const passwordCompare = await bcrypt.hash(password, user.password)
