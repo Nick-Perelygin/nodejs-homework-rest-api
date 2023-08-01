@@ -36,7 +36,7 @@ const registerSchema = Joi.object({
 })
 
 const loginSchema = Joi.object({
-    name: String,
+    name: Joi.string(),
     email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
     password: Joi.number().min(6).required(),
