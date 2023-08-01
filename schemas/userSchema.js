@@ -3,6 +3,7 @@ const {Schema, model} = require('mongoose')
 const {handleMongooseError} = require('../utility')
 
 const userSchema = new Schema({
+    name: String,
     password: {
       type: String,
       required: [true, 'Set password for user'],
