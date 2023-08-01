@@ -25,7 +25,7 @@ async function login (req, res) {
     if(!user){
         throw HttpError(401, 'Email or password invalid')
     }
-    const passwordCompare = await bcrypt.compare(password, user.password)
+    const passwordCompare = bcrypt.compare(password, user.password)
     if(!passwordCompare){
         throw HttpError(401, 'Email or password invalid')
     }
