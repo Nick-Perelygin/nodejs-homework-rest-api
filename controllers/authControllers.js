@@ -11,8 +11,8 @@ async function register (req, res) {
     if(user){
         throw HttpError(409, 'Email already in use')
     }
-    const hashPassword = bcrypt.hash(password, 10)
-    const newUser = await User.create({...req.body, password, hashPassword});
+    const hashPassword = await bcrypt.hash(password, 10)
+    const newUser = await User.create({...req.body, password: hashPassword});
     res.status(201).json({
         email: newUser.email,
         name: newUser.name
