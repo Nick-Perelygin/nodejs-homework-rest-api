@@ -7,7 +7,7 @@ const {SECRET_KEY} = process.env;
 const gravatar = require('gravatar')
 const path = require('path')
 const fs = require('fs/promises')
-const avatarsDir = path.join(__dirname, '../', 'public', 'avatars')
+const avatarsDir = path.join('../', 'public', 'avatars')
 
 async function register (req, res) {
     const {email, password} = req.body;
@@ -65,8 +65,8 @@ async function updateAvatar (req, res) {
     const{_id} = req.user
     const {path: tempUpload, originalname} = req.file;
     const fileName = `${_id}_${originalname}`
-    const resultUpdate = path.join(avatarsDir, fileName)
-    await fs.rename(tempUpload, resultUpdate)
+    const resultUpload = path.join(avatarsDir, fileName)
+    await fs.rename(tempUpload, resultUpload)
     const avatarUrl = path.join('avatars', fileName)
     await User.findByIdAndUpdate(_id, {avatarUrl})
 
