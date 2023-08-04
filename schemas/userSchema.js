@@ -27,6 +27,7 @@ userSchema.post('save', handleMongooseError);
 const User = model('user', userSchema)
 
 const registerSchema = Joi.object({
+    avatarURL: Joi.string(),
     name: Joi.string()
     .min(3)
     .max(30)
@@ -37,6 +38,7 @@ const registerSchema = Joi.object({
 })
 
 const loginSchema = Joi.object({
+    avatarURL: Joi.string(),
     name: Joi.string(),
     email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
