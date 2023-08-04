@@ -7,7 +7,8 @@ const {SECRET_KEY} = process.env;
 const gravatar = require('gravatar')
 const path = require('path')
 const fs = require('fs/promises')
-const avatarsDir = path.join('../', 'public', 'avatars')
+const Jimp = require('jimp')
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars')
 
 async function register (req, res) {
     const {email, password} = req.body;
@@ -68,7 +69,8 @@ async function updateAvatar (req, res) {
     const resultUpload = path.join(avatarsDir, fileName)
     await fs.rename(tempUpload, resultUpload)
     const avatarUrl = path.join('avatars', fileName)
-    await User.findByIdAndUpdate(_id, {avatarUrl})
+    const jimpAvatarUrl = Jimp.read(avatarUrl).resize(250, 250)
+    await User.findByIdAndUpdate(_id, {jimpAvatarUrl})
 
     res.json({
         avatarUrl
