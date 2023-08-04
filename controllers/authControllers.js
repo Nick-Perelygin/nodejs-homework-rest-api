@@ -4,6 +4,10 @@ const {User} = userSchema
 const {HttpError, ctrlWrapper} = require('../utility');
 const jwt = require('jsonwebtoken')
 const {SECRET_KEY} = process.env;
+const gravatar = require('gravatar')
+const path = require('path')
+const fs = require('fs/promises')
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars')
 
 async function register (req, res) {
     const {email, password} = req.body;
@@ -12,7 +16,8 @@ async function register (req, res) {
         throw HttpError(409, 'Email already in use')
     }
     const hashPassword = await bcrypt.hash(password, 10)
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const avatarUrl = gravatar.url(email)
+    const newUser = await User.create({...req.body, password: hashPassword, avatarUrl});
     res.status(201).json({
         email: newUser.email,
         name: newUser.name
@@ -56,9 +61,24 @@ async function logout (req, res) {
     });
 }
 
+async function updateAvatar (req, res) {
+    const{_id} = req.user
+    const {path: tempUpload, originalname} = req.file;
+    const fileName = `${_id}_${originalname}`
+    const resultUpdate = path.join(avatarsDir, fileName)
+    await fs.rename(tempUpload, resultUpdate)
+    const avatarUrl = path.join('avatars', fileName)
+    await User.findByIdAndUpdate(_id, {avatarUrl})
+
+    res.json({
+        avatarUrl
+    });
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),
     logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar),
 }
