@@ -3,10 +3,6 @@ const {Schema, model} = require('mongoose')
 const {handleMongooseError} = require('../utility')
 
 const userSchema = new Schema({
-    avatarURL: {
-      type: String,
-      required: true,
-    },
     name: String,
     password: {
       type: String,
@@ -23,6 +19,7 @@ const userSchema = new Schema({
       default: "starter"
     },
     token: String,
+    avatarUrl: String,
 }, {versionKey: false, timestamps: true});
 
 userSchema.post('save', handleMongooseError);
@@ -30,7 +27,7 @@ userSchema.post('save', handleMongooseError);
 const User = model('user', userSchema)
 
 const registerSchema = Joi.object({
-    avatarURL: Joi.string(),
+    avatarUrl: Joi.string(),
     name: Joi.string()
     .min(3)
     .max(30)
@@ -41,7 +38,7 @@ const registerSchema = Joi.object({
 })
 
 const loginSchema = Joi.object({
-    avatarURL: Joi.string(),
+    avatarUrl: Joi.string(),
     name: Joi.string(),
     email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
