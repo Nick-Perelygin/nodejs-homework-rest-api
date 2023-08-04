@@ -3,6 +3,10 @@ const {Schema, model} = require('mongoose')
 const {handleMongooseError} = require('../utility')
 
 const userSchema = new Schema({
+    avatarURL: {
+      type: String,
+      required: true,
+    },
     name: String,
     password: {
       type: String,
@@ -19,7 +23,6 @@ const userSchema = new Schema({
       default: "starter"
     },
     token: String,
-    avatarURL: String,
 }, {versionKey: false, timestamps: true});
 
 userSchema.post('save', handleMongooseError);
