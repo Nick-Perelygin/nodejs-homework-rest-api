@@ -69,7 +69,15 @@ async function updateAvatar (req, res) {
     const resultUpload = path.join(avatarsDir, fileName)
     await fs.rename(tempUpload, resultUpload)
     const avatarUrl = path.join('avatars', fileName)
-    const jimpAvatarUrl = Jimp.read(avatarUrl).resize(250, 250)
+    const jimpAvatarUrl = Jimp.read(avatarUrl, (err, lenna) => {
+        if (err) 
+        throw HttpError(404, 'Not found image');
+        lenna
+          .resize(250, 250)
+          .quality(60) 
+          .greyscale() 
+          .write(`${avatarUrl}-small-bw.jpg`);
+      });
     await User.findByIdAndUpdate(_id, {jimpAvatarUrl})
 
     res.json({
