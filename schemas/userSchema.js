@@ -20,6 +20,14 @@ const userSchema = new Schema({
     },
     token: String,
     avatarUrl: String,
+    verify: {
+      type: Boolean,
+      default: false
+    },
+    verificationCode: {
+      type: String,
+      default: ""
+    }
 }, {versionKey: false, timestamps: true});
 
 userSchema.post('save', handleMongooseError);
