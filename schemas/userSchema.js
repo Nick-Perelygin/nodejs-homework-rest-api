@@ -45,6 +45,11 @@ const registerSchema = Joi.object({
     password: Joi.number().min(6).required(),
 })
 
+const emailShema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+})
+
 const loginSchema = Joi.object({
     avatarUrl: Joi.string(),
     name: Joi.string(),
@@ -56,6 +61,7 @@ const loginSchema = Joi.object({
 const schemas = {
     registerSchema,
     loginSchema,
+    emailShema
 }
 
 module.exports = {
